@@ -30,11 +30,4 @@ public record Location(Long id, Long reference, Double latitude, Double longitud
     public boolean referencesPersonId(Long personId) {
         return reference != null && reference.equals(personId);
     }
-    
-    // override default toString
-    @Override
-    public String toString() {
-        return String.format("Location{id=%d, reference=%d, latitude=%.6f, longitude=%.6f}", 
-            id, reference, latitude, longitude);
-    }
 }

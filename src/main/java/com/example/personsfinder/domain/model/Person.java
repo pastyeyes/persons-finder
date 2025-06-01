@@ -17,10 +17,4 @@ public record Person(Long id, String name) {
     public boolean hasId() {
         return id != null;
     }
-    
-    // override default toString
-    @Override
-    public String toString() {
-        return String.format("Person{id=%d, name='%s'}", id, name);
-    }
 }
