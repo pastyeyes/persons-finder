@@ -26,13 +26,8 @@ public class HelloController {
 
     @GetMapping("/test")
     public String testDatabase() {
-        // Create a test person
-        Person person = new Person("Test User");
-        Person savedPerson = personRepository.save(person);
-        
-        // Retrieve all persons
-        List<Person> allPersons = personRepository.findAll();
-        
-        return "Database test successful! Created person: " + savedPerson + ". Total persons: " + allPersons.size();
+            // Load all existing persons from database
+            List<Person> allPersons = personRepository.findAll();
+            return "Database test successful! Total persons: " + allPersons.size();
     }
 }
