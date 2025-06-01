@@ -1,8 +1,8 @@
-package com.example.personsfinder.adapter.jpa.persistence.location.mapper;
+package com.example.personsfinder.adapter.persistence.location.mapper;
 
 import org.springframework.stereotype.Component;
 
-import com.example.personsfinder.adapter.jpa.persistence.location.LocationEntity;
+import com.example.personsfinder.adapter.persistence.connector.jpa.LocationEntity;
 import com.example.personsfinder.domain.model.Location;
 
 @Component
@@ -19,7 +19,13 @@ public class LocationMapper {
         if (domain == null) {
             return null;
         }
-        return new LocationEntity(domain.id(), domain.reference(), domain.latitude(), domain.longitude());
+        LocationEntity entity = new LocationEntity();
+        entity.setId(domain.id());
+        entity.setReference(domain.reference());
+        entity.setLatitude(domain.latitude());
+        entity.setLongitude(domain.longitude());
+
+        return entity;
     }
     
     public LocationEntity toEntityForCreation(Location domain) {

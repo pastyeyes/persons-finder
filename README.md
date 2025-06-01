@@ -1,108 +1,63 @@
-# 👥 Persons Finder – Backend Challenge
+# Persons Finder API
 
-Welcome to the **Persons Finder** backend challenge! This project simulates the backend for a mobile app that helps users find people around them.
+## Overview
 
-Your task is to implement a REST API that allows clients to create, update, and search for people based on location and other criteria.
+Persons Finder is a Spring Boot application using Gradle that provides a RESTful API for storing and retrieving geographical locations by a unique reference ID. The API is defined via an OpenAPI 3.0 specification, and basic coordinate validation is enforced.
 
----
+## What Has Been Done
 
-## 📌 Requirements
+- **OpenAPI Definition**: Created `openapi.yaml` describing the `Location` schema and endpoints:
+  - POST `/locations` to save a new location
+  - GET `/locations` to list all locations
+  - GET `/locations/{reference}` to retrieve a location by its reference ID
+- **API Implementation**: Developed Spring Boot controllers, service layer, and domain model for `Location`.
+- **Validation**: Added constraints for:
+  - Latitude (`-90.0` to `90.0`)
+  - Longitude (`-180.0` to `180.0`)
+- **Testing**:
+  - Unit tests for domain model and use-case implementations
+  - Integration tests for web controllers
+- **Build & Run**: Configured with Gradle wrapper, Dockerfile, and Docker Compose for local development.
 
-Implement the following endpoints:
+## What Is Missing
 
-### ➕ `POST /persons`
+- **Persistence**: Currently using an in-memory store. Needs migration to a production-grade database (e.g., PostgreSQL, MySQL).
+- **Global Error Handling**: Implement a centralized exception handler and standardized error response format.
+- **Extended Validation**: More field-level checks, request body error messaging, and null-safety controls.
+- **API Documentation UI**: Integrate Swagger UI or Redoc to serve interactive API docs.
+- **Security**: Add authentication/authorization (e.g., JWT, OAuth2) and input sanitization.
+- **CI/CD Pipeline**: Set up automated builds, tests, and Docker image publishing (e.g., GitHub Actions, Jenkins).
+- **Observability**: Introduce structured logging, metrics, health checks, and distributed tracing via Spring Actuator and Micrometer.
 
-Create a new person.
+## Identified Improvements
 
----
+1. **Database Integration**: Switch to JPA/Hibernate with a relational database, externalizing data configuration.
+2. **DTO & Mapping**: Use DTOs and MapStruct to decouple API contracts from internal entities.
+3. **Pagination & Filtering**: Add pagination parameters and filtering capabilities to GET endpoints.
+4. **Enhanced Documentation**: Auto-generate client SDKs, publish versioned API docs, and host them.
+5. **Resilience Patterns**: Implement retries, circuit breakers (Spring Cloud), and fallback mechanisms.
+6. **Containerization Enhancements**: Optimize Dockerfile, multi-stage builds, and expand `docker-compose.yml` for database/service orchestration.
+7. **Security Hardening**: Apply RBAC, rate limiting, and write security-focused tests.
+8. **Caching Layer**: Introduce Redis or similar for frequently accessed data to improve performance.
 
-### ✏️ `PUT /persons/{id}/location`
+## Getting Started
 
-Update (or create if not exists) a person's current **latitude** and **longitude**.
-
----
-
-### 🔍 `GET /persons/nearby`
-
-Find people around a **query location**, specified using the following query parameters:
-
-* `lat`: latitude
-* `lon`: longitude
-* `radiusKm`: radius in kilometres
-
-> 🧠 **Extra challenge**: Return the list **sorted by distance** to the query point.
-
----
-
-### 👤 `GET /persons`
-
-Retrieve one or more persons by their IDs. Accepts:
-
-* `id`: one or more person IDs (e.g., `?id=1&id=2`)
-
----
-
-## 📦 Expected Output
-
-All responses must be in **valid JSON format**, following clean and consistent REST API design principles.
-
----
-
-## 🧱 What You Need to Build
-
-* Domain models: `Person`, `Location`, etc.
-* Services for saving, updating, and querying data
-* In-memory storage or a basic persistent layer
-* Proper project structure (e.g. controller / service / repository)
-* Extra bonus if you use UseCase pattern (Controller -> Use Case (business logic) -> Service -> Repository)
-
----
-
-## 🧪 Bonus Points
-
-### ✅ Testing
-
-* Include **unit tests** for service logic
-* Include **integration tests** for API endpoints
-* Use a test framework like **JUnit**, **MockK**, or **Mockito**
+1. **Clone repository**
+   ```bash
+   git clone https://github.com/your-org/persons-finder.git
+   cd persons-finder
+   ```
+2. **Build & Test**
+   ```bash
+   ./gradlew clean build
+   ```
+3. **Run Application**
+   ```bash
+   ./gradlew bootRun
+   ```
+4. **API Access**
+   Open http://localhost:8080 and use the OpenAPI spec at `/v3/api-docs` (once Swagger UI is enabled).
 
 ---
 
-### 🧠 Scalability Challenge
-
-* Seed the system with **1 million**, **10 million**, and **100 million** records
-* Benchmark and **optimise** the `GET /persons/nearby` endpoint
-* Explain any indexing or query optimisation strategies used
-
----
-
-### 📚 Clean Code
-
-* Use **DTOs** for API request and response bodies
-* Apply proper **validation**, **error handling**, and maintain clean separation of concerns
-
----
-
-## ✅ Getting Started
-
-```bash
-git clone https://github.com/leonardoduartelana/persons-finder.git
-cd persons-finder
-```
-
-Implement your solution and push it to your **own GitHub repository**.
-
----
-
-## 📬 Submission & Questions
-
-* Submit the link to your GitHub repository
-* For any questions, email: [leo@emerge.nz](mailto:leo@emerge.nz)
-
----
-
-## 💡 Tips
-
-* Use **OpenAPI/Swagger** to document your APIs (optional, but encouraged)
-* Handle edge cases like missing locations or malformed input
-* Design the system **as if it were going into production**
+_This README outlines current work, outstanding features, and roadmap items for Persons Finder._

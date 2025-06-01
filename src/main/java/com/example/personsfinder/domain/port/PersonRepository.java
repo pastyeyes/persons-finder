@@ -11,6 +11,8 @@ public interface PersonRepository {
 
     Optional<Person> findById(Long id);
 
+    List<Person> findAllPersonsWithLocation();
+
     Person save(Person person);
 
     List<Person> findAll(); // for testing purposes

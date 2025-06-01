@@ -18,6 +18,11 @@ public record Person(Long id, String name, Location location) {
         this(null, name, location);
     }
     
+    /** Creates a Person with a predefined ID (for testing or rehydration) */
+    public Person(long id, String name) {
+        this(id, name, null);
+    }
+
     // Business logic methods
     public boolean hasId() {
         return id != null;

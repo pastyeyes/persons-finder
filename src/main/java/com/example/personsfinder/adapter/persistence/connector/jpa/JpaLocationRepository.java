@@ -1,4 +1,4 @@
-package com.example.personsfinder.adapter.jpa.persistence.location;
+package com.example.personsfinder.adapter.persistence.connector.jpa;
 
 import java.util.Optional;
 

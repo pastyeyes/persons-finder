@@ -1,18 +1,18 @@
-package com.example.personsfinder.application.service;
+package com.example.personsfinder.adapter.persistence.location;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
-import com.example.personsfinder.adapter.jpa.persistence.location.JpaLocationRepository;
-import com.example.personsfinder.adapter.jpa.persistence.location.LocationEntity;
-import com.example.personsfinder.adapter.jpa.persistence.location.mapper.LocationMapper;
+import com.example.personsfinder.adapter.persistence.connector.jpa.JpaLocationRepository;
+import com.example.personsfinder.adapter.persistence.connector.jpa.LocationEntity;
+import com.example.personsfinder.adapter.persistence.location.mapper.LocationMapper;
 import com.example.personsfinder.domain.model.Location;
 import com.example.personsfinder.domain.port.LocationRepository;
 
-@Service
+@Repository
 public class LocationRepositoryImpl implements LocationRepository {
     private final JpaLocationRepository jpaRepository;
     private final LocationMapper mapper;
