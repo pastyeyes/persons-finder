@@ -6,7 +6,7 @@ Persons Finder is a Spring Boot application using Gradle that provides a RESTful
 
 ## What Has Been Done
 
-- **OpenAPI Definition**: Updated `openapi.yaml` to describe schemas and endpoints for both `Location` (legacy) and `Person` resources. The primary API endpoints for managing persons and their locations are defined under `/api/v1/persons`.
+- **OpenAPI Definition**: In `spec.yaml`. The primary API endpoints for managing persons and their locations are defined under `/api/v1/persons`.
 - **API Implementation**:
   - Developed Spring Boot controllers, use cases (application services), and domain models for `Person` and `Location`.
   - The `PersonController` (`src/main/java/com/example/personsfinder/adapter/web/controller/persons/PersonController.java`) implements the following endpoints:
@@ -28,12 +28,9 @@ Persons Finder is a Spring Boot application using Gradle that provides a RESTful
 
 ## Identified Improvements
 
-3. **Pagination & Filtering**: Add pagination parameters and filtering capabilities to GET endpoints.
-4. **Enhanced Documentation**: Auto-generate client SDKs, publish versioned API docs, and host them.
-5. **Resilience Patterns**: Implement retries, circuit breakers (Spring Cloud), and fallback mechanisms.
-6. **Containerization Enhancements**: Optimize Dockerfile, multi-stage builds, and expand `docker-compose.yml` for database/service orchestration.
-7. **Security Hardening**: Apply RBAC, rate limiting, and write security-focused tests.
-8. **Caching Layer**: Introduce Redis or similar for frequently accessed data to improve performance.
+1. **Pagination & Filtering**: Add pagination parameters and filtering capabilities to GET endpoints.
+2. **Enhanced Documentation**: Auto-generate client SDKs, publish versioned API docs, and host them.
+3. **Containerization Enhancements**: Optimize Dockerfile, multi-stage builds, and expand `docker-compose.yml` for database/service orchestration.
 
 ## Identified Bottleneck
 
@@ -49,11 +46,11 @@ Migrating to a persistent database solution (e.g., PostgreSQL, MySQL) using Spri
 
 1.  **Clone repository**
     ```bash
-    git clone https://github.com/your-org/persons-finder.git # Replace with your actual repository URL if different
+    git clone https://github.com/pastyeyes/persons-finder.git
     cd persons-finder
     ```
 2.  **Build & Test**
-    The application uses Gradle. Ensure you have a compatible JDK installed (e.g., JDK 17 or newer).
+    The application uses Gradle. Ensure you have a compatible JDK installed (e.g., **JDK 17** or newer).
     ```bash
     ./gradlew clean build
     ```
@@ -64,7 +61,7 @@ Migrating to a persistent database solution (e.g., PostgreSQL, MySQL) using Spri
     ./gradlew bootRun
     ```
 
-    The application will be accessible at http://localhost:8080.
+    The application will be accessible at http://localhost:8080/hello.
 
 4.  **Run Application (Option 2: Using Docker Compose)**
     This method builds the Docker image (if not already built or if changes are detected) and starts the container defined in `docker-compose.yml`.
@@ -73,15 +70,18 @@ Migrating to a persistent database solution (e.g., PostgreSQL, MySQL) using Spri
     docker-compose up --build
     ```
 
-    The application will be accessible at http://localhost:8080.
+    The application will be accessible at http://localhost:8080/hello.
 
 5.  **API Access**
     Once the application is running, you can access:
-    - The API endpoints as defined in `openapi.yaml` (e.g., `/api/v1/persons`).
-    - The OpenAPI specification itself (e.g., at `/v3/api-docs` if Springdoc OpenAPI is configured, or by viewing the `openapi.yaml` file directly).
+    - The API endpoints as defined in `spec.yaml` (e.g., `/api/v1/persons`).
     - Example using curl for creating a person (ensure the server is running):
       ```bash
-      curl -X POST http://localhost:8080/api/v1/persons -H "Content-Type: application/json" -d '{"name": "John Doe"}'
+      curl -X POST http://localhost:8080/api/v1/persons -H "Content-Type: application/json" -d '{"name": "NEW_NAME"}'
+      ```
+    - Example using curl for reading
+      ```bash
+      curl "http://localhost:8080/api/v1/persons?id=1&id=2"
       ```
 
 ---
