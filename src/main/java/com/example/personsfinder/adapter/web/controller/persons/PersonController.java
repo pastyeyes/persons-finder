@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.personsfinder.adapter.web.controller.locations.LocationResponse;
 import com.example.personsfinder.adapter.web.controller.locations.UpdateLocationRequest;
 import com.example.personsfinder.application.usecase.createperson.CreatePersonUseCase;
+import com.example.personsfinder.application.usecase.findnearbypersons.FindNearbyPersonsUseCase;
 import com.example.personsfinder.application.usecase.findpersons.FindPersonsByIdsUseCase;
 import com.example.personsfinder.application.usecase.updatelocation.UpdatePersonLocationUseCase;
 import com.example.personsfinder.domain.model.Location;
@@ -34,6 +35,7 @@ public class PersonController {
     private final CreatePersonUseCase createPersonUseCase;
     private final FindPersonsByIdsUseCase findPersonsByIdsUseCase;
     private final UpdatePersonLocationUseCase updatePersonLocationUseCase;
+    private final FindNearbyPersonsUseCase findNearbyPersonsUseCase;
 
     @PostMapping
     public ResponseEntity<CreatePersonResponse> createPerson(@Valid @RequestBody CreatePersonRequest request) {
@@ -74,7 +76,29 @@ public class PersonController {
             savedLocation.latitude(), 
             savedLocation.longitude()
         );
-        
+
         return ResponseEntity.ok(response);
+    }
+
+
+@GetMapping("/nearby")
+public ResponseEntity<List<NearbyPersonResponse>> getNearbyPersons(
+        @RequestParam("lat") Double latitude,
+        @RequestParam("lon") Double longitude,
+        @RequestParam("radiusKm") Double radiusKm) {
+    
+    List<Person> nearbyPersons = findNearbyPersonsUseCase.invoke(latitude, longitude, radiusKm);
+    
+    Location queryLocation = new Location(latitude, longitude);
+
+    List<NearbyPersonResponse> response = nearbyPersons.stream()
+        .map(person -> new NearbyPersonResponse(
+            person.id(), 
+            person.name(),
+            queryLocation.distanceToInKm(person.location())
+        ))
+        .toList();
+    
+    return ResponseEntity.ok(response);
     }
 }
