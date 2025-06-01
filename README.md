@@ -6,33 +6,28 @@ Persons Finder is a Spring Boot application using Gradle that provides a RESTful
 
 ## What Has Been Done
 
-- **OpenAPI Definition**: Created `openapi.yaml` describing the `Location` schema and endpoints:
-  - POST `/locations` to save a new location
-  - GET `/locations` to list all locations
-  - GET `/locations/{reference}` to retrieve a location by its reference ID
-- **API Implementation**: Developed Spring Boot controllers, service layer, and domain model for `Location`.
-- **Validation**: Added constraints for:
-  - Latitude (`-90.0` to `90.0`)
-  - Longitude (`-180.0` to `180.0`)
+- **OpenAPI Definition**: Updated `openapi.yaml` to describe schemas and endpoints for both `Location` (legacy) and `Person` resources. The primary API endpoints for managing persons and their locations are defined under `/api/v1/persons`.
+- **API Implementation**:
+  - Developed Spring Boot controllers, use cases (application services), and domain models for `Person` and `Location`.
+  - The `PersonController` (`src/main/java/com/example/personsfinder/adapter/web/controller/persons/PersonController.java`) implements the following endpoints:
+    - `POST /api/v1/persons`: Create a new person.
+    - `GET /api/v1/persons`: Get persons by a list of IDs.
+    - `PUT /api/v1/persons/{id}/location`: Update a specific person's location.
+    - `GET /api/v1/persons/nearby`: Find persons near a given latitude and longitude within a specified radius.
+- **Validation**: Added input validation for request bodies and path variables (e.g., latitude/longitude ranges, non-blank names).
 - **Testing**:
-  - Unit tests for domain model and use-case implementations
-  - Integration tests for web controllers
-- **Build & Run**: Configured with Gradle wrapper, Dockerfile, and Docker Compose for local development.
+  - Unit tests for domain models and use case implementations.
+  - Integration tests for web controllers.
+- **Build & Run**: Configured with Gradle wrapper, Dockerfile, and Docker Compose for local development and containerization.
+- **Clean Architecture**: The project structure has been refactored to follow Clean Architecture principles, separating concerns into domain, application, and adapter layers as documented in `ARCHITECTURE.md`.
 
 ## What Is Missing
 
-- **Persistence**: Currently using an in-memory store. Needs migration to a production-grade database (e.g., PostgreSQL, MySQL).
-- **Global Error Handling**: Implement a centralized exception handler and standardized error response format.
-- **Extended Validation**: More field-level checks, request body error messaging, and null-safety controls.
-- **API Documentation UI**: Integrate Swagger UI or Redoc to serve interactive API docs.
 - **Security**: Add authentication/authorization (e.g., JWT, OAuth2) and input sanitization.
-- **CI/CD Pipeline**: Set up automated builds, tests, and Docker image publishing (e.g., GitHub Actions, Jenkins).
 - **Observability**: Introduce structured logging, metrics, health checks, and distributed tracing via Spring Actuator and Micrometer.
 
 ## Identified Improvements
 
-1. **Database Integration**: Switch to JPA/Hibernate with a relational database, externalizing data configuration.
-2. **DTO & Mapping**: Use DTOs and MapStruct to decouple API contracts from internal entities.
 3. **Pagination & Filtering**: Add pagination parameters and filtering capabilities to GET endpoints.
 4. **Enhanced Documentation**: Auto-generate client SDKs, publish versioned API docs, and host them.
 5. **Resilience Patterns**: Implement retries, circuit breakers (Spring Cloud), and fallback mechanisms.
@@ -40,23 +35,54 @@ Persons Finder is a Spring Boot application using Gradle that provides a RESTful
 7. **Security Hardening**: Apply RBAC, rate limiting, and write security-focused tests.
 8. **Caching Layer**: Introduce Redis or similar for frequently accessed data to improve performance.
 
+## Identified Bottleneck
+
+A key bottleneck for the application in its current state is its **reliance on an in-memory data store**. While suitable for initial development and testing, this approach has significant limitations for a production-like environment:
+
+- **Data Volatility**: All data is lost when the application restarts.
+- **Scalability**: In-memory storage does not scale well with increasing data volumes or concurrent users.
+- **Limited Querying**: Complex data queries and relationships are harder to manage effectively compared to dedicated database systems.
+
+Migrating to a persistent database solution (e.g., PostgreSQL, MySQL) using Spring Data JPA or a similar persistence framework is a critical next step. This is also highlighted in the "Identified Improvements" and "What Is Missing" sections.
+
 ## Getting Started
 
-1. **Clone repository**
-   ```bash
-   git clone https://github.com/your-org/persons-finder.git
-   cd persons-finder
-   ```
-2. **Build & Test**
-   ```bash
-   ./gradlew clean build
-   ```
-3. **Run Application**
-   ```bash
-   ./gradlew bootRun
-   ```
-4. **API Access**
-   Open http://localhost:8080 and use the OpenAPI spec at `/v3/api-docs` (once Swagger UI is enabled).
+1.  **Clone repository**
+    ```bash
+    git clone https://github.com/your-org/persons-finder.git # Replace with your actual repository URL if different
+    cd persons-finder
+    ```
+2.  **Build & Test**
+    The application uses Gradle. Ensure you have a compatible JDK installed (e.g., JDK 17 or newer).
+    ```bash
+    ./gradlew clean build
+    ```
+3.  **Run Application (Option 1: Using Gradle)**
+    This command starts the Spring Boot application directly.
+
+    ```bash
+    ./gradlew bootRun
+    ```
+
+    The application will be accessible at http://localhost:8080.
+
+4.  **Run Application (Option 2: Using Docker Compose)**
+    This method builds the Docker image (if not already built or if changes are detected) and starts the container defined in `docker-compose.yml`.
+
+    ```bash
+    docker-compose up --build
+    ```
+
+    The application will be accessible at http://localhost:8080.
+
+5.  **API Access**
+    Once the application is running, you can access:
+    - The API endpoints as defined in `openapi.yaml` (e.g., `/api/v1/persons`).
+    - The OpenAPI specification itself (e.g., at `/v3/api-docs` if Springdoc OpenAPI is configured, or by viewing the `openapi.yaml` file directly).
+    - Example using curl for creating a person (ensure the server is running):
+      ```bash
+      curl -X POST http://localhost:8080/api/v1/persons -H "Content-Type: application/json" -d '{"name": "John Doe"}'
+      ```
 
 ---
 
