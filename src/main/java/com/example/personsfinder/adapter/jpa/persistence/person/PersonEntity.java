@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 @Table(name = "persons")
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
 public class PersonEntity {
     

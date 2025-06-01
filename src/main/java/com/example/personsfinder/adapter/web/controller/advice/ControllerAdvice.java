@@ -13,7 +13,7 @@ public class ControllerAdvice {
     
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex){
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Invalid argument: " + ex.getMessage()));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Invalid argument: " + ex.getMessage()));
     }
 
     @ExceptionHandler(NotFoundException.class)
@@ -23,6 +23,12 @@ public class ControllerAdvice {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Invalid parameter in request" ));
+        String errorMessage = ex.getBindingResult().getFieldErrors().stream()
+            .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
+            .findFirst()
+            .map(error -> "Validation error: " + error)
+            .orElse("Invalid parameter in request");
+        
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(errorMessage));
     }
 }
