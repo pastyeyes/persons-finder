@@ -1,0 +1,5 @@
+services:
+  persons-finder-tomas:
+    build: .
+    ports:
+      - "8080:8080"
