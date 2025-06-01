@@ -13,11 +13,12 @@ import com.example.personsfinder.domain.model.Person;
 import com.example.personsfinder.domain.port.PersonRepository;
 
 @Service
-public class PersonServiceImpl implements PersonRepository {
+public class PersonRepositoryImpl implements PersonRepository {
     private final JpaPersonRepository jpaRepository;
     private final PersonMapper mapper;
 
-    public PersonServiceImpl(JpaPersonRepository jpaRepository, PersonMapper mapper) {
+    // jpaRepository gives access to the database, and mapper converts between domain model and entity
+    public PersonRepositoryImpl(JpaPersonRepository jpaRepository, PersonMapper mapper) {
         this.jpaRepository = jpaRepository;
         this.mapper = mapper;
     }

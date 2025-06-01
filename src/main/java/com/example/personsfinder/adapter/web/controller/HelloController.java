@@ -11,10 +11,12 @@ import com.example.personsfinder.domain.port.PersonRepository;
 @RestController
 public class HelloController {
 
-    private final PersonRepository personService;
+    private final PersonRepository personRepository;
 
-    public HelloController(PersonRepository personService) {
-        this.personService = personService;
+    // Constructor injection for the PersonRepository
+    // On other controllers, this would be ommited in favour of lombok @RequiredArgsConstructor
+    public HelloController(PersonRepository personRepository) {
+        this.personRepository = personRepository;
     }
 
     @GetMapping("/hello")
@@ -26,10 +28,10 @@ public class HelloController {
     public String testDatabase() {
         // Create a test person
         Person person = new Person("Test User");
-        Person savedPerson = personService.save(person);
+        Person savedPerson = personRepository.save(person);
         
         // Retrieve all persons
-        List<Person> allPersons = personService.findAll();
+        List<Person> allPersons = personRepository.findAll();
         
         return "Database test successful! Created person: " + savedPerson + ". Total persons: " + allPersons.size();
     }
